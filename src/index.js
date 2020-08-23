@@ -19,6 +19,17 @@ import './index.css';
       };
     }
 
+    // MOVE HISTORY STATE
+    constructor(props) {
+      super(props);
+      this.state = {
+        history: [{ // creates an array of that holds the state of every previous square position
+          squares: Array(9).fill(null),
+        }],
+        xIsNext: true,
+      }
+    }
+
     handleClick(i){
       const squares = this.state.squares.slice();
       if (calculateWinner(squares) || squares[i]) {
