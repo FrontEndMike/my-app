@@ -11,25 +11,6 @@ import './index.css';
   }
   
   class Board extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        squares: Array(9).fill(null),
-        xIsNext: true, //set initial state to a boolean value of true, so X moves fisrt by default
-      };
-    }
-
-    // MOVE HISTORY STATE
-    constructor(props) {
-      super(props);
-      this.state = {
-        history: [{ // creates an array of that holds the state of every previous square position
-          squares: Array(9).fill(null),
-        }],
-        xIsNext: true,
-      }
-    }
-
     handleClick(i){
       const squares = this.state.squares.slice();
       if (calculateWinner(squares) || squares[i]) {
@@ -45,8 +26,8 @@ import './index.css';
     renderSquare(i) {
       return (
         <Square 
-          value={this.state.squares[i]} //Passing a value as a prop to the Square component
-          onClick={() => this.handleClick(i)} //Passing a function as a prop to the Square component
+          value={this.props.squares[i]} //Passing a value as a prop to the Square component
+          onClick={() => this.props.onClick(i)} //Passing a function as a prop to the Square component
           />
       );
     }
@@ -84,6 +65,16 @@ import './index.css';
   }
   
   class Game extends React.Component {
+    // MOVE HISTORY STATE
+    constructor(props) {
+      super(props);
+      this.state = {
+        history: [{ // creates an array of that holds the state of every previous square position
+          squares: Array(9).fill(null),
+        }],
+        xIsNext: true, //set initial state to a boolean value of true, so X moves fisrt by default
+      }
+    }
     render() {
       return (
         <div className="game">
