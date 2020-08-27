@@ -51,11 +51,14 @@ import './index.css';
         history: [{ // creates an array of that holds the state of every previous square position
           squares: Array(9).fill(null),
         }],
+        stepNumber: 0,
         xIsNext: true, //set initial state to a boolean value of true, so X moves fisrt by default
       };
     }
+    // handleClick updates the move history, the current move, updates the state of the squares, 
+    // has win condition and swaps turns
     handleClick(i){
-      const history = this.state.history;
+      const history = this.state.history.slice(0, this.state.stepNumber + 1);
       const current = history[history.length - 1];
       const squares = current.squares.slice();
       if (calculateWinner(squares) || squares[i]) {
@@ -66,12 +69,20 @@ import './index.css';
         history: history.concat([{
           squares: squares,
         }]),
+        stepNumber: history.length,
         xIsNext: !this.state.xIsNext, //Swap state of xIsNext
+      });
+    }
+
+    jumpTo(step) {
+      this.setState({
+        stepNumber: step,
+        xIsNext: (step % 2) === 0,
       });
     }
     render() {
       const history = this.state.history;
-      const current = history[history.length - 1];
+      const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
 
       const moves = history.map((step, move) => {
@@ -79,7 +90,7 @@ import './index.css';
         'Go to move #' + move :
         'Go to game start';
         return(
-          <li>
+          <li key={move}>  
             <button onClick={() => this.jumpTo(move)}>{desc}</button>
           </li>
         );
